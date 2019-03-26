@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="http://ogp.me/ns/fb#">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="S R JAVED">
+        <meta property="og:image" content="{{ url_for('static',filename='img/imgg.png') }}" />
+		<title>SONGKHA</title>
+		<link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}">
+		<link rel="icon" type="image/x-icon" href="{{ url_for('static',filename='img/iconn.ico') }}">
+       
+	</head>
+    <body>
+        <section id="banner" style="background-image: url({{ url_for('static',filename='img/banner1.jpg')}})" >
+            <h1>Bangla</h1>
+            <h1>Handwritten digit recognizer</h1>
+        </section>
+
+        <div class="extra"></div>
+    
+        <div class="drawing">
+            <h2 style="margin-left:72px;">Draw the digit inside the Box.</h2>
+             <canvas id="canvas" width="280" height="280"></canvas>
+            <br>
+
+            <div class="site_btn">
+                <a id="clearButton" class="button">Clear</a>
+                <a class="myButton button">Predict</a>
+            </div>
+
+            <div >
+                <h1 id="result" ><span></span></h1>
+            </div>
+
+        </div>
+		
+    
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        
+        <script src="{{ url_for('static',filename='index.js') }}"></script>
+        <script type="text/javascript">
+            
+            $(".myButton").click(function(){
+                var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }}
+                var canvasObj=document.getElementById("canvas");
+                var img=canvasObj.toDataURL();
+                $.ajax({
+                    type:"POST",
+                    url:$SCRIPT_ROOT+"/predict/",
+                    data:img,
+                    success:function(data){
+                        $('#result').text('Prediction result : '+data);
+                    }
+
+                });
+            });
+            $("#clearButton").click(function(){
+                $("#result").text('Prediction result : ');
+            });
+
+        </script>
+			
+</body>
+</html>
